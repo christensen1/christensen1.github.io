@@ -5,7 +5,7 @@
 // Extra for Experts:
 // - describe what you did to take this project "above and beyond"
 let x = 45;
-let xspeed = 6;
+let xSpeed = 6;
 
 function setup() {
   createCanvas(windowWidth, windowHeight);
@@ -19,5 +19,5 @@ function draw() {
   fill(29,143,178);
   rect(mouseX, mouseY, 75, 75)
 }
-x += xspeed;
+x += xSpeed;
 if (x > windowWidth)x = -30;
