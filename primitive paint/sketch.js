@@ -25,3 +25,4 @@ function keyTyped(){
     triangle(mouseX + 30,mouseY +30, mouseX - 30, mouseY + 30,mouseX, mouseY-30);
   }
 }
+
