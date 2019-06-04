@@ -12,7 +12,6 @@ let spaceship = 0;
 let xPoint;
 let yPoint;
 
-
 function preload(){
   Spaceships.push(loadImage('assets/Spaceship1.png'));
   Spaceships.push(loadImage('assets/Spaceship2.png'));
@@ -53,10 +52,34 @@ function startScreen(postionX, postionY, size){
   textSize(62);
   fill(255);
   text('SPACE DEFENCE', width/2-180 , 200);
-  if (mouseIsPressed && mouseX < postionX + 330*0 + 250/2 && mouseX < postionX + 330*0 - 250/2){
-    if (mouseIsPressed && mouseX < postionY + 300/2 && mouseX < postionX - 300/2){
-    start === 1;
-    spaceship = 0;
+  if (mouseIsPressed && mouseX < postionX + 330*0 + 250/2  && mouseX > postionX + 330*0 - 250/2){
+    if (mouseIsPressed && mouseY < postionY + 300/2 && mouseY > postionY - 300/2){
+      start = 1;
+      spaceship = 0;
+    }
+  }
+  if (mouseIsPressed && mouseX < postionX + 330*1 + 250/2  && mouseX > postionX + 330*1 - 250/2){
+    if (mouseIsPressed && mouseY < postionY + 300/2 && mouseY > postionY - 300/2){
+      start = 1;
+      spaceship = 1;
+    }
+  }
+  if (mouseIsPressed && mouseX < postionX + 330*2 + 250/2  && mouseX > postionX + 330*2 - 250/2){
+    if (mouseIsPressed && mouseY < postionY + 300/2 && mouseY > postionY - 300/2){
+      start = 1;
+      spaceship = 2;
+    }
+  }
+  if (mouseIsPressed && mouseX < postionX + 330*3 + 250/2  && mouseX > postionX + 330*3 - 250/2){
+    if (mouseIsPressed && mouseY < postionY + 300/2 && mouseY > postionY - 300/2){
+      start = 1;
+      spaceship = 3;
+    }
+  }
+  if (mouseIsPressed && mouseX < postionX + 330*4 + 250/2  && mouseX > postionX + 330*4 - 250/2){
+    if (mouseIsPressed && mouseY < postionY + 300/2 && mouseY > postionY - 300/2){
+      start = 1;
+      spaceship = 4;
     }
   }
 }
@@ -68,10 +91,21 @@ function gameBackground(){
 function player(){
   background(255);
   imageMode(CENTER);
-  image(Spaceships[spaceship], xPoint, yPoint, 100, 100);
+  image(Spaceships[spaceship], xPoint, yPoint, 120, 120);
   keyPressed();
 }
 
 function keyPressed(){
-  //if(keyCode )
+  if(keyCode === UP_ARROW){
+    yPoint = yPoint - 3;
+  }
+  if(keyCode === RIGHT_ARROW){
+    xPoint = xPoint + 3;
+  } 
+  if(keyCode === LEFT_ARROW){
+    xPoint = xPoint - 3;
+  }
+  if(keyCode === DOWN_ARROW){
+    yPoint = yPoint + 3;
+  }
 }
