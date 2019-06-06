@@ -6,6 +6,8 @@
 // - describe what you did to take this project "above and beyond"
 
 let Spaceships = [];
+let Jetflames = [];
+let blasts = [];
 let startBackground;
 let start= 0;
 let spaceship = 0;
@@ -18,19 +20,27 @@ function preload(){
   Spaceships.push(loadImage('assets/Spaceship3.png'));
   Spaceships.push(loadImage('assets/Spaceship4.png'));
   Spaceships.push(loadImage('assets/Spaceship5.png'));
+  blasts.push(loadImage('assets/blast1.png'));
+  blasts.push(loadImage('assets/blast2.png'));
+  blasts.push(loadImage('assets/blast3.png'));
+  Jetflames.push(loadImage('assets/jetflame1.png'));
+  Jetflames.push(loadImage('assets/jetflame2.png'));
+  Jetflames.push(loadImage('assets/jetflame3.png'));
+  Jetflames.push(loadImage('assets/jetflame4.png'));
   startBackground = loadImage('assets/spacebackground.jpg');
 }
 function setup() {
   createCanvas(windowWidth, windowHeight);
   xPoint = width/2;
   yPoint = height/2 + 150;
+  bullet = xPoint;
 }
 
 
 function draw() {
   background(0);
   if (start === 0 ){
-    startScreen(150, 500, 150);
+    startScreen(220, 500, 150);
    }
    else{
     gameBackground()
@@ -86,6 +96,7 @@ function startScreen(postionX, postionY, size){
 
 function gameBackground(){
   background(255);
+  image(startBackground, windowWidth/2, windowHeight/2, windowWidth, windowHeight);
 }
 
 function player(){
@@ -96,16 +107,36 @@ function player(){
 }
 
 function keyPressed(){
+  imageMode(CENTER);
   if(keyCode === UP_ARROW){
     yPoint = yPoint - 3;
+    image(Jetflames[2], xPoint, yPoint+70, 50, 50);
+    image(Jetflames[3], xPoint, yPoint+70, 50, 50);
   }
-  if(keyCode === RIGHT_ARROW){
-    xPoint = xPoint + 3;
+  else if(keyCode === RIGHT_ARROW){
+    xPoint = xPoint + 4;
+    //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
+    image(Jetflames[1], xPoint, yPoint+70, 60,  50);
   } 
-  if(keyCode === LEFT_ARROW){
+  else if(keyCode === LEFT_ARROW){
     xPoint = xPoint - 3;
+    //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
+    image(Jetflames[1], xPoint, yPoint+70, 60, 60);
   }
-  if(keyCode === DOWN_ARROW){
+  else if(keyCode === DOWN_ARROW){
     yPoint = yPoint + 3;
+    //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
+    image(Jetflames[1], xPoint, yPoint+70, 60, 60);
+  }
+  if(keyCode = " "){
+  }
+  image(Jetflames[1], xPoint, yPoint+70, 60, 60);
+}
+
+class bullet{
+  constructor(x_, y_){
+    this.x = x_;
+    this.y = y_;
+    this
   }
 }
