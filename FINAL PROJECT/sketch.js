@@ -8,6 +8,7 @@
 let Spaceships = [];
 let Jetflames = [];
 let blasts = [];
+let bullet;
 let startBackground;
 let start= 0;
 let spaceship = 0;
@@ -33,7 +34,7 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   xPoint = width/2;
   yPoint = height/2 + 150;
-  bullet = xPoint;
+  bullet = yPoint;
 }
 
 
@@ -108,35 +109,47 @@ function player(){
 
 function keyPressed(){
   imageMode(CENTER);
-  if(keyCode === UP_ARROW){
-    yPoint = yPoint - 3;
+  if(keyIsDown(UP_ARROW)){
+    yPoint = yPoint - 5;
     image(Jetflames[2], xPoint, yPoint+70, 50, 50);
     image(Jetflames[3], xPoint, yPoint+70, 50, 50);
   }
-  else if(keyCode === RIGHT_ARROW){
+  else if(keyIsDown(RIGHT_ARROW)){
     xPoint = xPoint + 4;
     //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
-    image(Jetflames[1], xPoint, yPoint+70, 60,  50);
+    image(Jetflames[1], xPoint -5, yPoint+70, 60,  60);
   } 
-  else if(keyCode === LEFT_ARROW){
-    xPoint = xPoint - 3;
+  else if(keyIsDown(LEFT_ARROW)){
+    xPoint = xPoint - 4;
     //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
-    image(Jetflames[1], xPoint, yPoint+70, 60, 60);
+    image(Jetflames[1], xPoint + 5, yPoint+70, 60, 60);
   }
-  else if(keyCode === DOWN_ARROW){
-    yPoint = yPoint + 3;
+  else if(keyIsDown(DOWN_ARROW)){
+    yPoint = yPoint + 4;
     //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
-    image(Jetflames[1], xPoint, yPoint+70, 60, 60);
+    image(Jetflames[0,1], xPoint, yPoint+70, 60, 60);
   }
   if(keyCode = " "){
+    new shooting
   }
-  image(Jetflames[1], xPoint, yPoint+70, 60, 60);
 }
 
-class bullet{
-  constructor(x_, y_){
-    this.x = x_;
-    this.y = y_;
-    this
+class shooting{
+  constructor(){
+    this.x  = xPoint +5;
+    this.y = bullet-10;
+    this.size = 50;
+    this.ySpeed = 10;
+  }
+  move(){
+    this.y += this.ySpeed;
+    this.enemyCollision();
+  }
+  enemyCollision(){
+
+  }
+  display(){
+    imageMode(CENTER);
+     image(blasts[1], this.x,this.y , this.size, this.size)
   }
 }
