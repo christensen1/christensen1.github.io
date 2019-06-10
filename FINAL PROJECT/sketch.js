@@ -8,7 +8,8 @@
 let Spaceships = [];
 let Jetflames = [];
 let blasts = [];
-let bullet;
+let shootingArray = [];
+let bullet = 0;
 let startBackground;
 let start= 0;
 let spaceship = 0;
@@ -34,7 +35,6 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   xPoint = width/2;
   yPoint = height/2 + 150;
-  bullet = yPoint;
 }
 
 
@@ -46,6 +46,13 @@ function draw() {
    else{
     gameBackground()
     player()
+  }
+  if(bullet === 1){
+    for ( let i = 0; i < shootingArray.length; i++){
+      shootingArray[i].move();
+      shootingArray[i].display();
+      bullet = 0;
+    }
   }
 }
 
@@ -103,7 +110,7 @@ function gameBackground(){
 function player(){
   background(255);
   imageMode(CENTER);
-  image(Spaceships[spaceship], xPoint, yPoint, 120, 120);
+  image(Spaceships[spaceship], xPoint, yPoint, 110, 110);
   keyPressed();
 }
 
@@ -116,33 +123,35 @@ function keyPressed(){
   }
   else if(keyIsDown(RIGHT_ARROW)){
     xPoint = xPoint + 4;
-    //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
-    image(Jetflames[1], xPoint -5, yPoint+70, 60,  60);
+    image(Jetflames[1], xPoint -5, yPoint+55, 40,  40);
   } 
   else if(keyIsDown(LEFT_ARROW)){
     xPoint = xPoint - 4;
-    //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
-    image(Jetflames[1], xPoint + 5, yPoint+70, 60, 60);
+
+    image(Jetflames[1], xPoint + 5, yPoint+55, 40, 40);
   }
   else if(keyIsDown(DOWN_ARROW)){
     yPoint = yPoint + 4;
-    //image(Jetflames[0], xPoint, yPoint+70, 50, 50);
-    image(Jetflames[0,1], xPoint, yPoint+70, 60, 60);
+    image(Jetflames[0,1], xPoint, yPoint+55, 40, 40);
   }
-  if(keyCode = " "){
-    new shooting
+  if(keyIsDown(" ")){
+    shootingArray.push(new shooting(this.x, this.y));
+    bullet = 1;  
+  }
+  else{
+    bullet = 0;
   }
 }
 
 class shooting{
   constructor(){
-    this.x  = xPoint +5;
-    this.y = bullet-10;
+    this.x  = xPoint + 2.5;
+    this.y = yPoint-50;
     this.size = 50;
     this.ySpeed = 10;
   }
   move(){
-    this.y += this.ySpeed;
+    this.y -= this.ySpeed;
     this.enemyCollision();
   }
   enemyCollision(){
