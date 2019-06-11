@@ -35,24 +35,20 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   xPoint = width/2;
   yPoint = height/2 + 150;
+  start = 0;
 }
 
 
 function draw() {
-  background(0);
   if (start === 0 ){
     startScreen(220, 500, 150);
    }
    else{
-    gameBackground()
-    player()
+    player();
   }
-  if(bullet === 1){
-    for ( let i = 0; i < shootingArray.length; i++){
-      shootingArray[i].move();
-      shootingArray[i].display();
-      bullet = 0;
-    }
+  for ( let i = 0; i < shootingArray.length; i++){
+    shootingArray[i].move();
+    shootingArray[i].display();
   }
 }
 
@@ -69,7 +65,7 @@ function startScreen(postionX, postionY, size){
   }
   textSize(62);
   fill(255);
-  text('SPACE DEFENCE', width/2-180 , 200);
+  text('SPACE DEFENCE', width/2-240 , 200);
   if (mouseIsPressed && mouseX < postionX + 330*0 + 250/2  && mouseX > postionX + 330*0 - 250/2){
     if (mouseIsPressed && mouseY < postionY + 300/2 && mouseY > postionY - 300/2){
       start = 1;
@@ -102,19 +98,20 @@ function startScreen(postionX, postionY, size){
   }
 }
 
-function gameBackground(){
-  background(255);
-  image(startBackground, windowWidth/2, windowHeight/2, windowWidth, windowHeight);
-}
 
 function player(){
   background(255);
+  stroke(4, 40, 96)
+  strokeWeight(4);
+  fill(0);
+  rect(width/12, height/2, width/4, height);
+  //rect(width/6, height/2, width/4, height);
   imageMode(CENTER);
   image(Spaceships[spaceship], xPoint, yPoint, 110, 110);
-  keyPressed();
+  movement();
 }
 
-function keyPressed(){
+function movement(){
   imageMode(CENTER);
   if(keyIsDown(UP_ARROW)){
     yPoint = yPoint - 5;
@@ -134,12 +131,31 @@ function keyPressed(){
     yPoint = yPoint + 4;
     image(Jetflames[0,1], xPoint, yPoint+55, 40, 40);
   }
-  if(keyIsDown(" ")){
+}
+
+function keyPressed(){
+  // imageMode(CENTER);
+  // if(keyIsDown(UP_ARROW)){
+  //   yPoint = yPoint - 5;
+  //   image(Jetflames[2], xPoint, yPoint+70, 50, 50);
+  //   image(Jetflames[3], xPoint, yPoint+70, 50, 50);
+  // }
+  // else if(keyIsDown(RIGHT_ARROW)){
+  //   xPoint = xPoint + 4;
+  //   image(Jetflames[1], xPoint -5, yPoint+55, 40,  40);
+  // } 
+  // else if(keyIsDown(LEFT_ARROW)){
+  //   xPoint = xPoint - 4;
+
+  //   image(Jetflames[1], xPoint + 5, yPoint+55, 40, 40);
+  // }
+  // else if(keyIsDown(DOWN_ARROW)){
+  //   yPoint = yPoint + 4;
+  //   image(Jetflames[0,1], xPoint, yPoint+55, 40, 40);
+  // }
+  if(key === (' ')){
     shootingArray.push(new shooting(this.x, this.y));
-    bullet = 1;  
-  }
-  else{
-    bullet = 0;
+    print('11');
   }
 }
 
