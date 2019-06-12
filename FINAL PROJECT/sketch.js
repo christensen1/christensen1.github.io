@@ -9,12 +9,15 @@ let Spaceships = [];
 let Jetflames = [];
 let blasts = [];
 let shootingArray = [];
+let opponentArray = [];
 let bullet = 0;
 let startBackground;
 let start= 0;
 let spaceship = 0;
 let xPoint;
 let yPoint;
+let opponentX;
+let opponentY;
 
 function preload(){
   Spaceships.push(loadImage('assets/Spaceship1.png'));
@@ -35,6 +38,8 @@ function setup() {
   createCanvas(windowWidth, windowHeight);
   xPoint = width/2;
   yPoint = height/2 + 150;
+  opponentX = random(0, width);
+  opponentY = 0;
   start = 0;
 }
 
@@ -45,6 +50,12 @@ function draw() {
    }
    else{
     player();
+  }
+  for (let j = 0; j < opponentArray.length; j++ ){
+    opponentArray[j].move();
+    opponentArray[j].display();
+    opponentX = random(0, width);
+    opponentY = 0;
   }
   for ( let i = 0; i < shootingArray.length; i++){
     shootingArray[i].move();
@@ -104,18 +115,20 @@ function player(){
   stroke(4, 40, 96)
   strokeWeight(4);
   fill(0);
-  rect(width/12, height/2, width/4, height);
+  //rect(width/12, height/2, width/4, height);
   //rect(width/6, height/2, width/4, height);
   imageMode(CENTER);
   image(Spaceships[spaceship], xPoint, yPoint, 110, 110);
+  enemy();
   movement();
 }
+
+
 
 function movement(){
   imageMode(CENTER);
   if(keyIsDown(UP_ARROW)){
     yPoint = yPoint - 5;
-    image(Jetflames[2], xPoint, yPoint+70, 50, 50);
     image(Jetflames[3], xPoint, yPoint+70, 50, 50);
   }
   else if(keyIsDown(RIGHT_ARROW)){
@@ -134,28 +147,15 @@ function movement(){
 }
 
 function keyPressed(){
-  // imageMode(CENTER);
-  // if(keyIsDown(UP_ARROW)){
-  //   yPoint = yPoint - 5;
-  //   image(Jetflames[2], xPoint, yPoint+70, 50, 50);
-  //   image(Jetflames[3], xPoint, yPoint+70, 50, 50);
-  // }
-  // else if(keyIsDown(RIGHT_ARROW)){
-  //   xPoint = xPoint + 4;
-  //   image(Jetflames[1], xPoint -5, yPoint+55, 40,  40);
-  // } 
-  // else if(keyIsDown(LEFT_ARROW)){
-  //   xPoint = xPoint - 4;
-
-  //   image(Jetflames[1], xPoint + 5, yPoint+55, 40, 40);
-  // }
-  // else if(keyIsDown(DOWN_ARROW)){
-  //   yPoint = yPoint + 4;
-  //   image(Jetflames[0,1], xPoint, yPoint+55, 40, 40);
-  // }
   if(key === (' ')){
     shootingArray.push(new shooting(this.x, this.y));
     print('11');
+  }
+}
+
+function enemy(){
+  if(frameCount % 40 === 0 ){
+    opponentArray.push(new opponent(this.x, this.y));
   }
 }
 
@@ -168,13 +168,35 @@ class shooting{
   }
   move(){
     this.y -= this.ySpeed;
-    this.enemyCollision();
   }
-  enemyCollision(){
+  collision(){
 
   }
   display(){
     imageMode(CENTER);
      image(blasts[1], this.x,this.y , this.size, this.size)
+  }
+}
+
+class opponent{
+  constructor(){
+    this.x = opponentX
+    this.y = opponentY
+    this.angle = (random(-10, 10));
+    this.shipSize = 30;
+    this.Speed = 4;
+  }
+  move(){
+    this.y += this.Speed
+  }
+  collision(){
+
+  }
+  display(){
+    imageMode(CENTER);
+    push();
+    rotate(this.angle);
+    ellipse(this.x, this.y, this.shipSize);
+    pop();
   }
 }
