@@ -10,6 +10,7 @@ let Jetflames = [];
 let blasts = [];
 let shootingArray = [];
 let opponentArray = [];
+let astroide = [];
 let bullet = 0;
 let startBackground;
 let start= 0;
@@ -32,13 +33,16 @@ function preload(){
   Jetflames.push(loadImage('assets/jetflame2.png'));
   Jetflames.push(loadImage('assets/jetflame3.png'));
   Jetflames.push(loadImage('assets/jetflame4.png'));
+  astroide.push(loadImage('assets/astroide1.png'));
+  astroide.push(loadImage('assets/astroide2.png'));
   startBackground = loadImage('assets/spacebackground.jpg');
 }
+
 function setup() {
   createCanvas(windowWidth, windowHeight);
   xPoint = width/2;
   yPoint = height/2 + 150;
-  opponentX = random(0, width);
+  opponentX = random(0, windowWidth);
   opponentY = 0;
   start = 0;
 }
@@ -123,8 +127,6 @@ function player(){
   movement();
 }
 
-
-
 function movement(){
   imageMode(CENTER);
   if(keyIsDown(UP_ARROW)){
@@ -170,7 +172,6 @@ class shooting{
     this.y -= this.ySpeed;
   }
   collision(){
-
   }
   display(){
     imageMode(CENTER);
@@ -180,23 +181,28 @@ class shooting{
 
 class opponent{
   constructor(){
-    this.x = opponentX
+    this.x = random(0, width);
+
     this.y = opponentY
-    this.angle = (random(-10, 10));
-    this.shipSize = 30;
-    this.Speed = 4;
+    this.angle = (random(-5, 5));
+    this.size = 80;
+    this.xSpeed = random(-5,5);
+    this.ySpeed =5;
   }
   move(){
-    this.y += this.Speed
+    if(this.x < 0 ){
+      this.x = this.x - 30;
+   }
+   if(this.x > width){
+     this.x = this.x + 30;
+   }
+    this.y += this.ySpeed;
+    this.x += this.xSpeed;
   }
   collision(){
-
   }
   display(){
     imageMode(CENTER);
-    push();
-    rotate(this.angle);
-    ellipse(this.x, this.y, this.shipSize);
-    pop();
+    image(astroide[0],this.x, this.y, this.size, this.size);
   }
 }
