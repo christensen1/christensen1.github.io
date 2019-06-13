@@ -1,10 +1,3 @@
-// Final Project
-// Leif Christensen
-// 5/30/2019
-//
-// Extra for Experts:
-// - describe what you did to take this project "above and beyond"
-
 let Spaceships = [];
 let Jetflames = [];
 let blasts = [];
@@ -12,6 +5,7 @@ let shootingArray = [];
 let opponentArray = [];
 let astroide = [];
 let explosions = [];
+let bulletExplosionss= [];
 let bullet = 0;
 let startBackground;
 let start= 0;
@@ -39,10 +33,10 @@ function preload(){
   astroide.push(loadImage('assets/astroide1.png'));
   astroide.push(loadImage('assets/astroide2.png'));
   startBackground = loadImage('assets/spacebackground.jpg');
-  //space = loadImage('assets/space.jpg');
-  //explosions.push(loadImage('assests/explosion1.png'))
-  //explosions.push(loadImage('assests/explosion2.png'))
-  //explosions.push(loadImage('assests/explosion3.png'))
+  space = loadImage('assets/space.jpg');
+  explosions.push(loadImage('assets/explosion1.png'));
+  explosions.push(loadImage('assets/explosion2.png'));
+  explosions.push(loadImage('assets/explosion3.png'));
 }
 //preloads the needed images some in arrays and others just into varibles to be used for the background, spaceships and the effects.
 
@@ -53,6 +47,7 @@ function setup() {
   opponentX = random(width/4, width - width/4);
   opponentY = 0;
   start = 0;
+  lives = 100;
 }
 //setups the canvas and sets some varibles that requrie the screen size.
 
@@ -67,11 +62,31 @@ function draw() {
   for (let j = 0; j < opponentArray.length; j++ ){
     opponentArray[j].move();
     opponentArray[j].display();
+    opponentArray[j].collision();
+    print(lives);
+    if(opponentArray[j].collision === true){
+      opponentArray.splice(j, 1);
+    }
   }
   //loops the opponent, the astroid class into their array and allows them to move and be seen.
   for ( let i = 0; i < shootingArray.length; i++){
     shootingArray[i].move();
     shootingArray[i].display();
+    for (let j = 0; j < opponentArray.length; j++ ){
+      if(shootingArray[i].collision(opponentArray[j])){
+        bulletExplosionss.push(new bulletExplosion(shootingArray[i].x, shootingArray[i].y));
+        opponentArray.splice(j, 1);
+        shootingArray.splice(i, 1);
+        //remove bullet
+        break;
+      }
+    }
+  }
+  for ( let i = 0; i < bulletExplosionss.length; i++){
+    bulletExplosionss[i].display();
+    if(bulletExplosionss[i].isAlive()===false){
+      bulletExplosionss.splice(i,1);
+    }
   }
   //loops the shooting array and allows the bullests to move and be seen.
 }
@@ -144,42 +159,46 @@ function player(){
     imageMode(CENTER);
     image(Spaceships[spaceship], xPoint, yPoint, 110, 110);
   }
-  //explosion animation
-  textSize(150)
-  stroke(255, 250, 2);
-  strokeWeight(3)
-  print('END GAME', width/2, height/2)
+  else if(lives <= 0 ){
+    image(explosions[2], xPoint, yPoint, 110, 110);
+    textSize(150);
+    stroke(255, 250, 2);
+    strokeWeight(3);
+    text('END GAME', width/2 -350, height/2)
+  }
 }
 //places the  player incontroll of the ship they chose with 5 lives.
 
 function gamebackground(){
   imageMode(CENTER)
-  image(startBackground, width/2 ,height/2, width/1.5, height);
-  textSize(60)
+  image(space, width/2 ,height/2, width/1.5, height);
+  textSize(40)
   stroke(255, 250, 2);
   strokeWeight(3)
-  print('LIVES:', width/2, height/2);
+  text('LIVES:', width-100, height/2 - 100);
 }
 //puts the background in.
 
 function movement(){
   imageMode(CENTER);
-  if(keyIsDown(UP_ARROW)){
-    yPoint = yPoint - 7;
-    image(Jetflames[3], xPoint, yPoint+70, 50, 50);
-  }
-  else if(keyIsDown(RIGHT_ARROW)){
-    xPoint = xPoint + 6;
-    image(Jetflames[1], xPoint -5, yPoint+55, 40,  40);
-  } 
-  else if(keyIsDown(LEFT_ARROW)){
-    xPoint = xPoint - 6;
-
-    image(Jetflames[1], xPoint + 5, yPoint+55, 40, 40);
-  }
-  else if(keyIsDown(DOWN_ARROW)){
-    yPoint = yPoint + 6;
-    image(Jetflames[0,1], xPoint, yPoint+55, 40, 40);
+  if(lives > 0){
+    if(keyIsDown(UP_ARROW)){
+      yPoint = yPoint - 7;
+      image(Jetflames[3], xPoint, yPoint+70, 50, 50);
+    }
+    else if(keyIsDown(RIGHT_ARROW)){
+      xPoint = xPoint + 6;
+      image(Jetflames[1], xPoint -5, yPoint+55, 40,  40);
+    } 
+    else if(keyIsDown(LEFT_ARROW)){
+      xPoint = xPoint - 6;
+  
+      image(Jetflames[1], xPoint + 5, yPoint+55, 40, 40);
+    }
+    else if(keyIsDown(DOWN_ARROW)){
+      yPoint = yPoint + 6;
+      image(Jetflames[0,1], xPoint, yPoint+55, 40, 40);
+    }
   }
 }
 //setsup the ships movement for the player.
@@ -193,7 +212,7 @@ function keyPressed(){
 //be looped at the top.
 
 function enemy(){
-  if(frameCount % 30 === 0 ){
+  if(frameCount % 20 === 0 ){
     opponentArray.push(new opponent(this.x, this.y));
   }
 }
@@ -209,10 +228,11 @@ class shooting{
   move(){
     this.y -= this.ySpeed;
   }
-  collision(){
-    if(this.x > opponentX + 60 && this.x < opponentX - 60){
-      if(this.y > opponentY + 60 && this.y < opponentY - 60){
+  collision(o){
+    if(this.x < o.x + 40 && this.x + this.size > o.x - 40){
+      if(this.y < o.y + 40 && this.y + this.size > o.y - 40){
         print('hit')
+        return true;
       }
     }
   }
@@ -230,7 +250,7 @@ class opponent{
     this.angle = (random(-5, 5));
     this.size = (random(80,120));
     this.xSpeed = random(-10,10);
-    this.ySpeed =6.5;
+    this.ySpeed = 5;
   }
   //sets the size and position.
   move(){
@@ -242,10 +262,11 @@ class opponent{
   }
   //lets teh class travel across the screen and stops it from going across the boarders.
   collision(){
-    if(this.x > xPoint + 60 && this.x < xPoint - 60){
-      if(this.y > yPoint + 60 && this.y < yPoint - 60){
+    if(this.x < xPoint + 20 && this.x + this.size > xPoint - 20){
+      if(this.y < yPoint + 20 && this.y + this.size > yPoint - 20){
         print('hit');
         lives = lives -1;
+        return true
       }
     }
   }
@@ -253,6 +274,25 @@ class opponent{
   display(){
     imageMode(CENTER);
     image(astroide[0],this.x, this.y, this.size, this.size);
+  }
+}
+class bulletExplosion{
+  constructor(x_, y_){
+    this.x = x_;
+    this.y = y_;
+    this.size = random(120, 160)
+    this.countdown = 20;
+  }
+  display(){
+    image(blasts[2], this.x,this.y, this.size, this.size);
+    this.countdown --
+  }
+
+  isAlive(){
+    if(this.countdown <= 1){
+      return false
+    }
+    return true
   }
 }
 //this is the opponent that will try to distroy your spaceship.
